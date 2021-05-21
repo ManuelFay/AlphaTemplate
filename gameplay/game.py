@@ -102,13 +102,14 @@ class Game:
                                         for point in coord:
                                             print(point.x, point.y)
                                             self.visual_engine.grid = self.visual_engine.fill_big(self.visual_engine.grid, (point.x // 2) * width, (point.y // 2) * height,
-                                                            blue2 if self.board.turn == 1 else green2)
+                                                            blue2 if self.board.turn == PLAYER_1 else green2)
 
                                             self.visual_engine.surf_grid = pygame.surfarray.make_surface(self.visual_engine.grid)
                                         print("SCORE : BLUE = ", self.board.score_p1, ' PURPLE =', self.board.score_p2)
 
                                         if self.board.score_p1 + self.board.score_p2 == rows * cols:
                                             self.game_over = True
+                                            break
 
                                     self.board.update_turn()
 

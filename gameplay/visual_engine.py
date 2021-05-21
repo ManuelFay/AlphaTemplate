@@ -27,6 +27,7 @@ class VisualEngine:
         size = (rows * height + 5, cols * width + 5 + 30) # 5 epaisseur du trait  #30 zone de texte
         self.screen = pygame.display.set_mode(size)
         self.font = pygame.font.Font('freesansbold.ttf', 32)
+        self.font2 = pygame.font.Font('freesansbold.ttf', 20)
 
         self.grid = self.init_grid()
         self.game_array = self.init_array()
@@ -100,7 +101,7 @@ class VisualEngine:
         score1 = self.font.render(str(score_p1), True, blue)
         score2 = self.font.render(str(score_p2), True, green)
 
-        winner_font = self.font.render(str(turn) + 'won', True, (0, 0, 0))  ###
+        winner_font = self.font2.render(f"{turn} Won", True, (0, 0, 0))  ###
         self.screen.blit(self.surf_score, (0, cols * width + 5))
         # surf_score.blit(score, (3, 3))
         self.screen.blit(score1, (3, cols * width + 5 + 3))
