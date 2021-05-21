@@ -79,6 +79,14 @@ class VisualEngine:
         self.screen.blit(self.horizontal_lines, (0, 0))
         self.screen.blit(self.vertical_lines, (0, 0))
         self.screen.blit(self.dots, (0, 0))
+
+        for x, y in list(zip(*np.nonzero(board > 2))):
+            self.grid = self.fill_big(self.grid, (x // 2) * width,
+                                                                  (y // 2) * height,
+                                                                  blue2 if (board[x, y] == 3) else green2)
+
+            self.surf_grid = pygame.surfarray.make_surface(self.grid)
+
         pygame.display.update()
 
 

@@ -2,6 +2,7 @@
 import sys
 import math
 import random
+import numpy as np
 
 import pygame
 
@@ -93,16 +94,9 @@ class Game:
 
                                     x = min(max(0, int(x // (height / 2))), self.board.board.shape[0] - 1)
                                     y = min(max(0, int(y // (width / 2))), self.board.board.shape[1] - 1)
-
                                     self.make_move(x, y)
-
-                                    # if len(coord)>0:
-                                    import numpy as np
-                                    for x, y in list(zip(*np.nonzero(self.board.board > 2))):
-                                        self.visual_engine.grid = self.visual_engine.fill_big(self.visual_engine.grid, (x // 2) * width, (y // 2) * height,
-                                                        blue2 if (self.board.board[x, y] == 3) else green2)
-
-                                        self.visual_engine.surf_grid = pygame.surfarray.make_surface(self.visual_engine.grid)
+                                    self.visual_engine.draw_board(self.board.board,
+                                                                  self.agent1.ai_confidence if self.agent1 else 0)
 
                     self.visual_engine.draw_board(self.board.board, self.agent1.ai_confidence if self.agent1 else 0)
                     self.visual_engine.draw_scores(self.board.score_p1, self.board.score_p2, self.board.turn)
