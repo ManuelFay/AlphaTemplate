@@ -21,6 +21,7 @@ class BoardTree(Board, Node):
         self.id_ = hash(self.board.tostring())
 
     def is_terminal(self):
+        # check turn (if it needs offset)
         return self.winning_move(PLAYER_1) or self.winning_move(PLAYER_2) or len(self.get_valid_locations()) == 0
 
     def find_children(self):

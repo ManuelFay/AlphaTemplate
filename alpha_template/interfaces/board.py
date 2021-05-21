@@ -8,10 +8,8 @@ class Board:
     def __init__(self, board, turn):
         self.board = self.init_array() if board is None else board
         self.turn = turn
-        self.count = 0
         self.score_p1 = 0
         self.score_p2 = 0
-
         self.last_move = None
         assert isinstance(self.board, np.ndarray)
 
@@ -28,6 +26,7 @@ class Board:
                 else:
                     game_array[i, j] = 1
         return game_array
+
 
     def check_new_cells(self):
         kernel = np.array([[0, 1, 0],
@@ -46,14 +45,18 @@ class Board:
         """Update board after move"""
 
         # Can be removed for speed
-        if self.board[row, col] != 1:
+        if not self.is_valid_location(row, col):
             return False, []
 
         self.board[row, col] = 2
         coords = self.check_new_cells()  # est ce qu un carre a ete forme
-
         for x, y in coords:
             self.board[x, y] = 3 if self.turn == PLAYER_1 else 4
+
+        if self.turn == PLAYER_1:
+            self.score_p1 += len(coords)
+        else:
+            self.score_p2 += len(coords)
 
         self.last_move = (row, col)
         self.update_turn()
@@ -61,23 +64,22 @@ class Board:
 
 
     # TODO: adapt to your game. Actions may be encoded with a (row, col) tuple instead of just col
-    def is_valid_location(self, action) -> bool:
+    def is_valid_location(self, row, col) -> bool:
         """Check if the action is possible: (ie. No one played there before)
         Return boolean value"""
-        row, col = action
-        return self.board[row, col] == 0
+        return self.board[row, col] == 1
 
     def __str__(self):
         return np.flip(self.board, 0).tostring()
 
     # TODO: adapt to your game
-    def winning_move(self, piece):
-        """Detect if game is won"""
-        if "game is over":
-            return True
-        return False
+    def winning_move(self, turn):
+        """Detect if game is won
+        Here it means that the player that just played has won more than half of the squares"""
+        if turn==PLAYER_1:
+            return self.score_p1 > rows*cols/2
+        return self.score_p2 > rows*cols/2
 
-    # TODO: Not all games can tie
     def tie(self):
         """Detect if the gampe is a tie
         Here it checks if board is full, different games may have different tie condictions"""

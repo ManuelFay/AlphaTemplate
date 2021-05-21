@@ -28,24 +28,21 @@ class Game:
             self.visual_engine.draw_scores(self.board.score_p1, self.board.score_p2, self.board.turn)
 
     # TODO: Adapt to your game
-    def make_move(self, col):
-        if self.board.is_valid_location(col):
-            row = self.board.get_next_open_row(col)
+    def make_move(self, row, col):
+        if self.board.is_valid_location(row, col):
             self.board.play_action(row, col)
 
-            if self.board.winning_move((1-self.board.turn) + 1):
+            if self.board.winning_move((1-self.board.turn)):
                 self.board.update_turn()
                 if self.visual_engine:
-                    label = self.visual_engine.myfont.render(f"Player {self.board.turn} wins!!", 1,
-                                                             YELLOW if self.board.turn else RED)
-                    self.visual_engine.screen.blit(label, (40, 10))
+                    self.visual_engine.draw_scores(self.board.score_p1, self.board.score_p2, self.board.turn, game_over=True)
+
                 self.game_over = True
                 self.result = self.board.turn
 
             elif self.board.tie():
                 if self.visual_engine:
-                    label = self.visual_engine.myfont.render("It's a tie!", 1, BLUE)
-                    self.visual_engine.screen.blit(label, (40, 10))
+                    self.visual_engine.draw_scores(self.board.score_p1, self.board.score_p2, self.board.turn, game_over=True)
                 self.game_over = True
                 self.result = 0.5
 
@@ -96,32 +93,23 @@ class Game:
 
                                     x = min(max(0, int(x // (height / 2))), self.board.board.shape[0] - 1)
                                     y = min(max(0, int(y // (width / 2))), self.board.board.shape[1] - 1)
-                                    coord = self.board.play_action(x, y)
 
-                                    if len(coord)>0:
-                                        if self.board.turn - 1 == PLAYER_1:
-                                            self.board.score_p1 += len(coord)
-                                        else:
-                                            self.board.score_p2 += len(coord)
+                                    self.make_move(x, y)
 
-                                        for x, y in coord:
-                                            self.visual_engine.grid = self.visual_engine.fill_big(self.visual_engine.grid, (x // 2) * width, (y // 2) * height,
-                                                            blue2 if (self.board.turn - 1)== PLAYER_1 else green2)
+                                    # if len(coord)>0:
+                                    import numpy as np
+                                    for x, y in list(zip(*np.nonzero(self.board.board > 2))):
+                                        self.visual_engine.grid = self.visual_engine.fill_big(self.visual_engine.grid, (x // 2) * width, (y // 2) * height,
+                                                        blue2 if (self.board.board[x, y] == 3) else green2)
 
-                                            self.visual_engine.surf_grid = pygame.surfarray.make_surface(self.visual_engine.grid)
-                                        print("SCORE : BLUE = ", self.board.score_p1, ' PURPLE =', self.board.score_p2)
-
-                                        if self.board.score_p1 + self.board.score_p2 == rows * cols:
-                                            self.game_over = True
-                                            break
-
+                                        self.visual_engine.surf_grid = pygame.surfarray.make_surface(self.visual_engine.grid)
 
                     self.visual_engine.draw_board(self.board.board, self.agent1.ai_confidence if self.agent1 else 0)
                     self.visual_engine.draw_scores(self.board.score_p1, self.board.score_p2, self.board.turn)
 
         if self.visual_engine:
             self.visual_engine.draw_board(self.board.board, self.agent1.ai_confidence if self.agent1 else 0)
-            self.visual_engine.draw_scores(self.board.score_p1, self.board.score_p2, self.board.turn)
+            self.visual_engine.draw_scores(self.board.score_p1, self.board.score_p2, self.board.turn, game_over=True)
             pygame.time.wait(3000)
 
         if self.agent0:

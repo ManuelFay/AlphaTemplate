@@ -82,11 +82,10 @@ class VisualEngine:
         pygame.display.update()
 
 
-    def draw_scores(self, score_p1, score_p2, turn):
+    def draw_scores(self, score_p1, score_p2, turn, game_over=False):
         score1 = self.font.render(str(score_p1), True, blue)
         score2 = self.font.render(str(score_p2), True, green)
 
-        winner_font = self.font2.render(f"{turn} Won", True, (0, 0, 0))  ###
         self.screen.blit(self.surf_score, (0, cols * width + 5))
         # surf_score.blit(score, (3, 3))
         self.screen.blit(score1, (3, cols * width + 5 + 3))
@@ -95,7 +94,12 @@ class VisualEngine:
         if score_p2 > 9:
             self.screen.blit(score2, (rows * height + 5 - 35, cols * width + 5 + 3))
 
-        if score_p1 + score_p2 == rows * cols:
+        if game_over:
+            if score_p1 == score_p2:
+                winner_font = self.font2.render(f"Tie! ", True, (0, 0, 0))
+            else:
+                winner_font = self.font2.render(f"P{turn} Won", True, (0, 0, 0))
+
             self.screen.blit(self.surf_winner, (0, 0))
             self.screen.blit(winner_font, (cols * width / 2, rows * height / 2))  ###centrer
         pygame.display.update()
