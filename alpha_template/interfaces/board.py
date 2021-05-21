@@ -1,13 +1,17 @@
 import numpy as np
 
 # TODO: Change depending on your constants
-from alpha_template.constants.constants import ROW_COUNT, COLUMN_COUNT
+from alpha_template.constants.constants import rows, cols
 
 
 class Board:
     def __init__(self, board, turn):
-        self.board = np.zeros((ROW_COUNT, COLUMN_COUNT)).astype(np.uint8) if board is None else board
+        self.board = np.zeros((rows, cols)).astype(np.uint8) if board is None else board
         self.turn = turn
+        self.count = 0
+        self.score_p1 = 0
+        self.score_p2 = 0
+
         self.last_move = None
         assert isinstance(self.board, np.ndarray)
 

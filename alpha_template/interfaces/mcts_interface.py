@@ -1,6 +1,6 @@
 import random
 from alpha_template.engines.mcts import Node
-from alpha_template.constants.constants import PLAYER_PIECE, AI_PIECE
+from alpha_template.constants.constants import PLAYER_1, PLAYER_2
 
 from alpha_template.interfaces.board import Board
 
@@ -21,7 +21,7 @@ class BoardTree(Board, Node):
         self.id_ = hash(self.board.tostring())
 
     def is_terminal(self):
-        return self.winning_move(PLAYER_PIECE) or self.winning_move(AI_PIECE) or len(self.get_valid_locations()) == 0
+        return self.winning_move(PLAYER_1) or self.winning_move(PLAYER_2) or len(self.get_valid_locations()) == 0
 
     def find_children(self):
         if self.is_terminal():  # If the game is finished then no moves can be made

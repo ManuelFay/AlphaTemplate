@@ -1,23 +1,25 @@
 # Constants
 # TODO: Update the values and adapt to your game as need be
 
-BLUE = (0, 0, 255)
-BLACK = (0, 0, 0)
-RED = (255, 0, 0)
-YELLOW = (255, 255, 0)
-WHITE = (150, 150, 150)
+rows = 2
+cols = 2
 
-ROW_COUNT = 6
-COLUMN_COUNT = 7
+width = 60
+height = 60
 
-PLAYER = 0
-AI = 1
+PLAYER_1 = 0
+PLAYER_2 = 1
 
-EMPTY = 0
-PLAYER_PIECE = 1
-AI_PIECE = 2
-
-WINDOW_LENGTH = 4
-
-SQUARESIZE = 100
-RADIUS = int(SQUARESIZE/2 - 5)
+bg_color = (120, 120, 120)
+white = (255, 255, 255)
+red = (255, 0, 0)
+blue = (0, 0, 255)
+blue2 = (0, 0, 120)
+green = (255, 0, 255)
+green2 = (120, 0, 120)
+grey = (40, 40, 40)
+grey0 = (80, 80, 80)
+grey1 = (120, 120, 120)
+grey2 = (160, 160, 160)
+grey3 = (200, 200, 200)
+grey4 = (210, 210, 210)
