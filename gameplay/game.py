@@ -77,7 +77,6 @@ class Game:
                         sys.exit()
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         print('current player : ', self.board.turn)
-                        print('count ', self.board.count)
 
                         for seg_data in self.visual_engine.h_segments + self.visual_engine.v_segments:
                             seg = seg_data.rect
@@ -92,17 +91,22 @@ class Game:
                                     elif self.board.turn == PLAYER_2:
                                         seg_data.color = green
 
-                                    success, coord, self.board.count = self.visual_engine.mouse_clic(seg_data, self.board.turn, self.board.count)
-                                    if success:
-                                        if self.board.turn == PLAYER_1:
+                                    segment = seg_data.rect
+                                    x, y = segment.centerx, segment.centery
+
+                                    x = min(max(0, int(x // (height / 2))), self.board.board.shape[0] - 1)
+                                    y = min(max(0, int(y // (width / 2))), self.board.board.shape[1] - 1)
+                                    coord = self.board.play_action(x, y)
+
+                                    if len(coord)>0:
+                                        if self.board.turn - 1 == PLAYER_1:
                                             self.board.score_p1 += len(coord)
-                                        elif self.board.turn == PLAYER_2:
+                                        else:
                                             self.board.score_p2 += len(coord)
 
-                                        for point in coord:
-                                            print(point.x, point.y)
-                                            self.visual_engine.grid = self.visual_engine.fill_big(self.visual_engine.grid, (point.x // 2) * width, (point.y // 2) * height,
-                                                            blue2 if self.board.turn == PLAYER_1 else green2)
+                                        for x, y in coord:
+                                            self.visual_engine.grid = self.visual_engine.fill_big(self.visual_engine.grid, (x // 2) * width, (y // 2) * height,
+                                                            blue2 if (self.board.turn - 1)== PLAYER_1 else green2)
 
                                             self.visual_engine.surf_grid = pygame.surfarray.make_surface(self.visual_engine.grid)
                                         print("SCORE : BLUE = ", self.board.score_p1, ' PURPLE =', self.board.score_p2)
@@ -110,8 +114,6 @@ class Game:
                                         if self.board.score_p1 + self.board.score_p2 == rows * cols:
                                             self.game_over = True
                                             break
-
-                                    self.board.update_turn()
 
 
                     self.visual_engine.draw_board(self.board.board, self.agent1.ai_confidence if self.agent1 else 0)

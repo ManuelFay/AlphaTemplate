@@ -30,8 +30,6 @@ class VisualEngine:
         self.font2 = pygame.font.Font('freesansbold.ttf', 20)
 
         self.grid = self.init_grid()
-        self.game_array = self.init_array()
-
         # Check if useful
         a = segment('h', pygame.Rect((30, 30), (30, 30)), False, red)
         self.surf_grid = pygame.surfarray.make_surface(self.grid)
@@ -65,19 +63,6 @@ class VisualEngine:
                         grid = self.fill_big(grid, i * width, j * height, grey1)
 
         return grid
-
-    @staticmethod
-    def init_array():
-        game_array = np.zeros((rows * 2 + 1, cols * 2 + 1))
-        for i in range(0, rows * 2 + 1):
-            for j in range(0, cols * 2 + 1):
-                if i % 2 == 0:
-                    if j % 2 == 0:
-                        game_array[i, j] = 1
-                else:
-                    if j % 2 != 0:
-                        game_array[i, j] = 1
-        return game_array
 
     def draw_board(self, board, ai_confidence: float = 0.5):
         for seg_data in self.v_segments:
@@ -122,66 +107,3 @@ class VisualEngine:
             for l in range(0, height):
                 grid[i + k, j + l] = color
         return grid
-
-    def mouse_clic(self, seg_data, CURRENT_PLAYER, count):
-        segment = seg_data.rect
-        x, y = segment.centerx, segment.centery
-        x = int(x // (height / 2))
-        y = int(y // (width / 2))
-        print('coord segmnent =', x, y)  # retranscription de coord game array
-
-        self.game_array[x, y] = 2
-
-        succes, coords = self.check_cell(x, y, seg_data)  # est ce qu un carre a ete forme
-        if succes:
-            if CURRENT_PLAYER == PLAYER_1:
-                for coord in coords:
-                    self.game_array[coord.x, coord.y] = 3
-            elif CURRENT_PLAYER == PLAYER_2:
-                for coord in coords:
-                    self.game_array[coord.x, coord.y] = 4
-            return True, coords, count
-        else:
-            count += 1
-            return False, coords, count
-
-    def remplissage_ou_pas(self, x, y):
-        if self.game_array[x - 1, y] == 2 and self.game_array[x, y - 1] == 2 and self.game_array[x + 1, y] == 2 and self.game_array[x, y + 1] == 2:
-            return True
-        return False
-
-    def check_cell(self, x, y, seg_data):
-        coords_cases_remplies = []
-        succes = 0
-        # on verifie seulement les cases adjacentes pour economiser du calcul
-        constraint = 0
-        yesboy = 0
-
-        if x == 0 or x == rows * 2:
-            constraint += 1
-        if y == 0 or y == cols * 2:
-            constraint += 1
-
-        if seg_data.type_ == 'h':
-            if (y + 1) <= cols * 2 and self.remplissage_ou_pas(x, y + 1):
-                coords_cases_remplies.append(coords(x, y + 1))
-                yesboy += 1
-
-            if (y - 1) >= 0 and self.remplissage_ou_pas(x, y - 1):
-                coords_cases_remplies.append(coords(x, y - 1))
-                yesboy += 1
-
-        elif seg_data.type_ == 'v':
-            if (x + 1) <= rows * 2 and self.remplissage_ou_pas(x + 1, y):
-                coords_cases_remplies.append(coords(x + 1, y))
-                yesboy += 1
-
-            if (x - 1) >= 0 and self.remplissage_ou_pas(x - 1, y):
-                coords_cases_remplies.append(coords(x - 1, y))
-                yesboy += 1
-
-        if yesboy >= 1:
-            succes = 1
-        return succes, coords_cases_remplies
-
-
