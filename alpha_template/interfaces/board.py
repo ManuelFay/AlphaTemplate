@@ -5,12 +5,15 @@ from alpha_template.constants.constants import rows, cols, PLAYER_2, PLAYER_1
 
 
 class Board:
-    def __init__(self, board, turn):
+    def __init__(self, board, turn, score_p1=0, score_p2=0):
         self.board = self.init_array() if board is None else board
         self.turn = turn
-        self.score_p1 = 0
-        self.score_p2 = 0
+        self.score_p1 = score_p1
+        self.score_p2 = score_p2
         self.last_move = None
+        self.kernel = np.array([[0, 1, 0],
+                                [1, 0, 1],
+                                [0, 1, 0]])
         assert isinstance(self.board, np.ndarray)
 
     @staticmethod
@@ -29,13 +32,13 @@ class Board:
 
 
     def check_new_cells(self):
-        kernel = np.array([[0, 1, 0],
-                           [1, 0, 1],
-                           [0, 1, 0]])
+        output  = np.nonzero(convolve2d(self.board >= 2, self.kernel, mode="same") == 4)
+        coords = [(x,y) for x,y in zip(*output) if self.board[x, y] == 0]
 
-        output  = np.nonzero(convolve2d(self.board >= 2, kernel, mode="same") == 4)
-        output = [(x,y) for x,y in zip(*output) if self.board[x, y] == 0]
-        return output
+        for x, y in coords:
+            self.board[x, y] = 3 if self.turn == PLAYER_1 else 4
+
+        return coords
 
     def update_turn(self):
         self.turn = 1 - self.turn
@@ -45,12 +48,11 @@ class Board:
         """Update board after move"""
         # Can be removed for speed
         if not self.is_valid_location(x, y):
-            return False, []
+            print(f"Unvalid line ({x, y})")
+            return
 
         self.board[x, y] = 2
         coords = self.check_new_cells()  # est ce qu un carre a ete forme
-        for x, y in coords:
-            self.board[x, y] = 3 if self.turn == PLAYER_1 else 4
 
         if self.turn == PLAYER_1:
             self.score_p1 += len(coords)
@@ -59,8 +61,6 @@ class Board:
 
         self.last_move = (x, y)
         self.update_turn()
-        return coords
-
 
     # TODO: adapt to your game. Actions may be encoded with a (x, y) tuple instead of just col
     def is_valid_location(self, x, y) -> bool:

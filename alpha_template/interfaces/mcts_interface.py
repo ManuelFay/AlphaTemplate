@@ -6,13 +6,13 @@ from alpha_template.interfaces.board import Board
 
 
 class BoardTree(Board, Node):
-    def __init__(self, board, turn):
+    def __init__(self, board, turn, **args):
         self.id_ = None
-        super().__init__(board, turn)
+        super().__init__(board, turn, **args)
         self.update_id()
 
     def create_child(self, x, y):
-        child = BoardTree(self.board.copy(), turn=self.turn)
+        child = BoardTree(self.board.copy(), turn=self.turn, score_p1=self.score_p1, score_p2=self.score_p2)
         child.play_action(x, y)
         child.update_id()
         return child

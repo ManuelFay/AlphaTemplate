@@ -53,7 +53,7 @@ class Game:
         while not self.game_over:
 
             if self.board.turn == PLAYER_1 and self.agent0 is not None:  # If it is the AI turn
-                x, y = self.agent0.move(board=self.board.board, turn=self.board.turn)
+                x, y = self.agent0.move(board=self.board.board, turn=self.board.turn, score_p1=self.board.score_p1, score_p2=self.board.score_p2)
                 self.make_move(x, y)
                 if self.visual_engine:
                     print(f"Agent 0 Confidence: {self.agent0.ai_confidence}")
@@ -61,7 +61,7 @@ class Game:
                 continue
 
             if self.board.turn == PLAYER_2 and self.agent1 is not None:  # If it is the AI turn
-                x, y = self.agent1.move(board=self.board.board, turn=self.board.turn)
+                x, y = self.agent1.move(board=self.board.board, turn=self.board.turn, score_p1=self.board.score_p1, score_p2=self.board.score_p2)
                 self.make_move(x, y)
                 if self.visual_engine:
                     print(f"Agent 1 Confidence: {self.agent1.ai_confidence}")

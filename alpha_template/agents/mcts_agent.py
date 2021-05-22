@@ -46,8 +46,8 @@ class MCTSAgent(BaseAgent):
         optimal_board = self.tree.choose(board)
         return self.tree.score(optimal_board)
 
-    def move(self, board, turn):
-        board = BoardTree(board, turn=turn)
+    def move(self, board, turn, **args):
+        board = BoardTree(board, turn=turn, **args)
 
         timeout_start = time.time()
         if self.show_pbar:
