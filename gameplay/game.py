@@ -68,7 +68,6 @@ class Game:
                     self.visual_engine.draw_board(self.board.board, self.agent1.ai_confidence if self.agent1 else 0)
                 continue
 
-            # TODO: Adapt to your visual engine
             if self.visual_engine:
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:

@@ -1,8 +1,8 @@
 # Constants
 # TODO: Update the values and adapt to your game as need be
 
-rows = 2
-cols = 2
+rows = 3
+cols = 3
 
 width = 60
 height = 60
