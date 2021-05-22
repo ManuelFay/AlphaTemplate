@@ -12,11 +12,13 @@ class coords:
 
 
 class segment:
-    def __init__(self, type_, rect, clicked, color):
+    def __init__(self, type_, rect, clicked, color, x, y):
         self.type_ = type_
         self.rect = rect
         self.clicked = clicked
         self.color = color
+        self.x = x
+        self.y = y
 
 
 
@@ -32,7 +34,8 @@ class VisualEngine:
 
         self.grid = self.init_grid()
         # Check if useful
-        a = segment('h', pygame.Rect((30, 30), (30, 30)), False, red)
+        a = segment('h', pygame.Rect((30, 30), (30, 30)), False, red, None, None)
+
         self.surf_grid = pygame.surfarray.make_surface(self.grid)
         self.surf_score = pygame.Surface([rows * height + 5, 30])
         self.surf_winner = pygame.Surface([rows * height + 5, cols * width + 5])
@@ -46,9 +49,10 @@ class VisualEngine:
 
         for i in range(0, rows + 1):
             for j in range(0, cols + 1):
+                # 3 extra segments in h and v that could be removed
                 pygame.draw.circle(self.dots, grey0, (i * height + 3, j * width + 3), 5)
-                self.h_segments.append(segment('h', pygame.Rect((i * height, j * width), (width, 5)), False, grey3))
-                self.v_segments.append(segment('v', pygame.Rect((i * height, j * width), (5, height)), False, grey3))
+                self.h_segments.append(segment('h', pygame.Rect((i * height, j * width), (width, 5)), False, grey3, x=i*2+1, y=j*2))
+                self.v_segments.append(segment('v', pygame.Rect((i * height, j * width), (5, height)), False, grey3, x=i*2, y=j*2+1))
         self.surf_winner.fill(grey4)
 
 
@@ -131,12 +135,6 @@ class VisualEngine:
                     print('deja cliuqe')
                     break
                 else:
-                    seg_data.clicked = True
-                    if board.turn == PLAYER_1:
-                        seg_data.color = blue
-                    elif board.turn == PLAYER_2:
-                        seg_data.color = green
-
                     segment = seg_data.rect
                     x, y = segment.centerx, segment.centery
 
@@ -148,10 +146,12 @@ class VisualEngine:
         return None
 
     def update_segments(self, board):
-        # for x, y in list(zip(*np.nonzero(self.board == 3))):
-        return
-        for seg_data in self.v_segments:
-            pygame.draw.rect(self.vertical_lines, seg_data.color, seg_data.rect)
 
-        for seg_data in self.h_segments:
-            pygame.draw.rect(self.horizontal_lines, seg_data.color, seg_data.rect)
+        for seg_data in self.v_segments + self.h_segments:
+            if seg_data.x < board.shape[0] and seg_data.y < board.shape[1]:
+                if board[seg_data.x, seg_data.y] == 2:
+                    seg_data.clicked = True
+                    seg_data.color = grey
+                else:
+                    seg_data.clicked = False
+                    seg_data.color = grey2
