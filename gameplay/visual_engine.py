@@ -20,6 +20,7 @@ class segment:
 
 
 
+
 # TODO: Substitute your visual engine
 class VisualEngine:
     def __init__(self):
@@ -65,6 +66,8 @@ class VisualEngine:
         return grid
 
     def draw_board(self, board, ai_confidence: float = 0.5):
+
+        self.update_segments(board)
         for seg_data in self.v_segments:
             pygame.draw.rect(self.vertical_lines, seg_data.color, seg_data.rect)
 
@@ -119,3 +122,36 @@ class VisualEngine:
             for l in range(0, height):
                 grid[i + k, j + l] = color
         return grid
+
+    def detect_collision(self, event, board):
+        for seg_data in self.h_segments + self.v_segments:
+            seg = seg_data.rect
+            if seg.collidepoint(event.pos):
+                if seg_data.clicked == True:
+                    print('deja cliuqe')
+                    break
+                else:
+                    seg_data.clicked = True
+                    if board.turn == PLAYER_1:
+                        seg_data.color = blue
+                    elif board.turn == PLAYER_2:
+                        seg_data.color = green
+
+                    segment = seg_data.rect
+                    x, y = segment.centerx, segment.centery
+
+                    # Bound the click result for safety
+                    x = min(max(0, int(x // (height / 2))), board.board.shape[0] - 1)
+                    y = min(max(0, int(y // (width / 2))), board.board.shape[1] - 1)
+
+                    return x, y
+        return None
+
+    def update_segments(self, board):
+        # for x, y in list(zip(*np.nonzero(self.board == 3))):
+        return
+        for seg_data in self.v_segments:
+            pygame.draw.rect(self.vertical_lines, seg_data.color, seg_data.rect)
+
+        for seg_data in self.h_segments:
+            pygame.draw.rect(self.horizontal_lines, seg_data.color, seg_data.rect)

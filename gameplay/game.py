@@ -29,9 +29,9 @@ class Game:
             self.visual_engine.draw_scores(self.board.score_p1, self.board.score_p2, self.board.turn)
 
     # TODO: Adapt to your game
-    def make_move(self, row, col):
-        if self.board.is_valid_location(row, col):
-            self.board.play_action(row, col)
+    def make_move(self, x, y):
+        if self.board.is_valid_location(x, y):
+            self.board.play_action(x, y)
 
             if self.board.winning_move((1-self.board.turn)):
                 self.board.update_turn()
@@ -52,17 +52,18 @@ class Game:
 
         while not self.game_over:
 
-            if self.board.turn == 0 and self.agent0 is not None:  # If it is the AI turn
-                col = self.agent0.move(board=self.board.board, turn=self.board.turn)
-                self.make_move(col)
+            if self.board.turn == PLAYER_1 and self.agent0 is not None:  # If it is the AI turn
+                x, y = self.agent0.move(board=self.board.board, turn=self.board.turn)
+                self.make_move(x, y)
                 if self.visual_engine:
                     print(f"Agent 0 Confidence: {self.agent0.ai_confidence}")
                     self.visual_engine.draw_board(self.board.board, self.agent1.ai_confidence if self.agent1 else 0)
                 continue
 
-            if self.board.turn == 1 and self.agent1 is not None:  # If it is the AI turn
-                col = self.agent1.move(board=self.board.board, turn=self.board.turn)
-                self.make_move(col)
+            if self.board.turn == PLAYER_2 and self.agent1 is not None:  # If it is the AI turn
+                x, y = self.agent1.move(board=self.board.board, turn=self.board.turn)
+                self.make_move(x, y)
+                print(x, y)
                 if self.visual_engine:
                     print(f"Agent 1 Confidence: {self.agent1.ai_confidence}")
                     self.visual_engine.draw_board(self.board.board, self.agent1.ai_confidence if self.agent1 else 0)
@@ -75,31 +76,14 @@ class Game:
                         sys.exit()
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         print('current player : ', self.board.turn)
+                        coord = self.visual_engine.detect_collision(event, self.board)
+                        if coord:
+                            self.make_move(*coord)
+                        self.visual_engine.draw_board(self.board.board,
+                                                      self.agent1.ai_confidence if self.agent1 else 0)
 
-                        for seg_data in self.visual_engine.h_segments + self.visual_engine.v_segments:
-                            seg = seg_data.rect
-                            if seg.collidepoint(event.pos):
-                                if seg_data.clicked == True:
-                                    print('deja cliuqe')
-                                    break
-                                else:
-                                    seg_data.clicked = True
-                                    if self.board.turn == PLAYER_1:
-                                        seg_data.color = blue
-                                    elif self.board.turn == PLAYER_2:
-                                        seg_data.color = green
-
-                                    segment = seg_data.rect
-                                    x, y = segment.centerx, segment.centery
-
-                                    x = min(max(0, int(x // (height / 2))), self.board.board.shape[0] - 1)
-                                    y = min(max(0, int(y // (width / 2))), self.board.board.shape[1] - 1)
-                                    self.make_move(x, y)
-                                    self.visual_engine.draw_board(self.board.board,
-                                                                  self.agent1.ai_confidence if self.agent1 else 0)
-
-                    self.visual_engine.draw_board(self.board.board, self.agent1.ai_confidence if self.agent1 else 0)
-                    self.visual_engine.draw_scores(self.board.score_p1, self.board.score_p2, self.board.turn)
+                self.visual_engine.draw_board(self.board.board, self.agent1.ai_confidence if self.agent1 else 0)
+                self.visual_engine.draw_scores(self.board.score_p1, self.board.score_p2, self.board.turn)
 
         if self.visual_engine:
             self.visual_engine.draw_board(self.board.board, self.agent1.ai_confidence if self.agent1 else 0)

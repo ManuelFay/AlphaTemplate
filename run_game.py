@@ -1,6 +1,7 @@
 import sys
 from gameplay.game import Game
 
+from alpha_template.agents.mcts_agent import MCTSAgent
 # from alpha_template.agents.neural_mcts_agent import NeuralMCTSAgent
 
 # Setup players (None is a human player, MCTSAgent, MinimaxAgent)
@@ -11,7 +12,7 @@ agent0 = None
 # agent0 = NeuralMCTSAgent(simulation_time=3, model_path="/home/manu/perso/RL_Connect4/model_0.pth")
 
 agent1 = None # NeuralMCTSAgent(simulation_time=2, show_pbar=True, model_path="./models/model_1.pth")
-# agent1 = MCTSAgent(simulation_time=3, tree_path=None)
+# agent1 = MCTSAgent(simulation_time=3, show_pbar=True)
 
 game = Game(agent0=agent0, agent1=agent1, enable_ui=True)
 result = game.play()

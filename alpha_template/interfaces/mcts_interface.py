@@ -11,9 +11,9 @@ class BoardTree(Board, Node):
         super().__init__(board, turn)
         self.update_id()
 
-    def create_child(self, row, col):
+    def create_child(self, x, y):
         child = BoardTree(self.board.copy(), turn=self.turn)
-        child.play_action(row, col)
+        child.play_action(x, y)
         child.update_id()
         return child
 
@@ -31,8 +31,8 @@ class BoardTree(Board, Node):
         childs = set()
 
         # TODO: Adapt to your game if needed
-        for col, row in self.get_valid_locations():
-            childs.add(self.create_child(row, col))
+        for x, y in self.get_valid_locations():
+            childs.add(self.create_child(x, y))
 
         return childs
 
@@ -41,8 +41,8 @@ class BoardTree(Board, Node):
             return None  # If the game is finished then no moves can be made
 
         # TODO: Adapt to your game if needed
-        col, row = random.choice(self.get_valid_locations())
-        return self.create_child(row, col)
+        x, y = random.choice(self.get_valid_locations())
+        return self.create_child(x, y)
 
     def reward(self):
         return 0.5 if len(self.get_valid_locations()) == 0 else 0
