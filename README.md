@@ -1,5 +1,6 @@
 # AlphaZero Template Combining MCTS and a Neural Evaluator to learn optimal policies through self-play
 
+## SquareGame version
 
 ### Setup
 

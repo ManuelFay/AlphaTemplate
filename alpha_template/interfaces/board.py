@@ -60,7 +60,9 @@ class Board:
             self.score_p2 += len(coords)
 
         self.last_move = (x, y)
-        self.update_turn()
+
+        if (len(coords) == 0) and (self.board == 0).any():
+            self.update_turn()
 
     # TODO: adapt to your game. Actions may be encoded with a (x, y) tuple instead of just col
     def is_valid_location(self, x, y) -> bool:
@@ -79,9 +81,9 @@ class Board:
         return self.score_p2 > rows*cols/2
 
     def tie(self):
-        """Detect if the gampe is a tie
-        Here it checks if board is full, different games may have different tie condictions"""
-        return not (self.board == 0).any()
+        """Detect if the game is a tie
+        Here it checks if board is full and score equal, different games may have different tie condictions"""
+        return (not (self.board == 0).any()) and (self.score_p2 == self.score_p1)
 
     def get_valid_locations(self):
         """Return valid actions to play

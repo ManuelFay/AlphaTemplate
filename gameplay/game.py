@@ -32,20 +32,12 @@ class Game:
     def make_move(self, x, y):
         if self.board.is_valid_location(x, y):
             self.board.play_action(x, y)
-
-            if self.board.winning_move((1-self.board.turn)):
-                self.board.update_turn()
+            if self.board.winning_move(self.board.turn) or self.board.tie(): # Switch because replay upon win
                 if self.visual_engine:
                     self.visual_engine.draw_scores(self.board.score_p1, self.board.score_p2, self.board.turn, game_over=True)
 
                 self.game_over = True
-                self.result = self.board.turn
-
-            elif self.board.tie():
-                if self.visual_engine:
-                    self.visual_engine.draw_scores(self.board.score_p1, self.board.score_p2, self.board.turn, game_over=True)
-                self.game_over = True
-                self.result = 0.5
+                self.result = 0.5 if self.board.tie() else self.board.turn
 
     def play(self):
         """ Game routine - call the visual engine, the UI, the AI and the board state."""
@@ -57,8 +49,9 @@ class Game:
                 self.make_move(x, y)
                 if self.visual_engine:
                     print(f"Agent 0 Confidence: {self.agent0.ai_confidence}")
-                    self.visual_engine.draw_board(self.board.board, self.agent1.ai_confidence if self.agent1 else 0)
-                continue
+                    self.visual_engine.draw_board(self.board.board, self.agent0.ai_confidence if self.agent0 else 0)
+                    self.visual_engine.draw_scores(self.board.score_p1, self.board.score_p2, self.board.turn)
+                # continue
 
             if self.board.turn == PLAYER_2 and self.agent1 is not None:  # If it is the AI turn
                 x, y = self.agent1.move(board=self.board.board, turn=self.board.turn, score_p1=self.board.score_p1, score_p2=self.board.score_p2)
@@ -66,14 +59,14 @@ class Game:
                 if self.visual_engine:
                     print(f"Agent 1 Confidence: {self.agent1.ai_confidence}")
                     self.visual_engine.draw_board(self.board.board, self.agent1.ai_confidence if self.agent1 else 0)
-                continue
+                    self.visual_engine.draw_scores(self.board.score_p1, self.board.score_p2, self.board.turn)
+                # continue
 
             if self.visual_engine:
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
                         sys.exit()
                     if event.type == pygame.MOUSEBUTTONDOWN:
-                        print('current player : ', self.board.turn)
                         coord = self.visual_engine.detect_collision(event, self.board)
                         if coord:
                             self.make_move(*coord)
