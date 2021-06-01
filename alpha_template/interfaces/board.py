@@ -61,7 +61,7 @@ class Board:
 
         self.last_move = (x, y)
 
-        if (len(coords) == 0) and (self.board == 0).any():
+        if len(coords) == 0:
             self.update_turn()
 
     # TODO: adapt to your game. Actions may be encoded with a (x, y) tuple instead of just col
@@ -73,17 +73,15 @@ class Board:
     def __str__(self):
         return np.flip(self.board, 0).tostring()
 
-    def winning_move(self, turn):
+    def winning_move(self):
         """Detect if game is won
         Here it means that the player that just played has won more than half of the squares"""
-        if turn==PLAYER_1:
-            return self.score_p1 > rows*cols/2
-        return self.score_p2 > rows*cols/2
+        return max(self.score_p2, self.score_p1) > rows*cols/2
 
     def tie(self):
         """Detect if the game is a tie
-        Here it checks if board is full and score equal, different games may have different tie condictions"""
-        return (not (self.board == 0).any()) and (self.score_p2 == self.score_p1)
+        Here it checks if board is full and score indeterminate, different games may have different tie condictions"""
+        return (not (self.board == 0).any()) and (not self.winning_move())
 
     def get_valid_locations(self):
         """Return valid actions to play

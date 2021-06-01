@@ -4,8 +4,8 @@
 rows = 2
 cols = 2
 
-width = 60
-height = 60
+width = 160
+height = 160
 
 PLAYER_1 = 0
 PLAYER_2 = 1
