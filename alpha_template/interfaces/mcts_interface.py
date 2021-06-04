@@ -21,7 +21,7 @@ class BoardTree(Board, Node):
         self.id_ = hash(self.board.tostring())
 
     def is_terminal(self):
-        return self.winning_move(PLAYER_1) or self.winning_move(PLAYER_2) or len(self.get_valid_locations()) == 0
+        return self.winning_move() or self.tie()
 
     def find_children(self):
         if self.is_terminal():  # If the game is finished then no moves can be made
@@ -44,7 +44,7 @@ class BoardTree(Board, Node):
         return self.create_child(x, y)
 
     def reward(self):
-        return 0.5 if len(self.get_valid_locations()) == 0 else 0
+        return 0.5 if self.tie() else 1
 
     def __hash__(self):
         return self.id_

@@ -53,6 +53,7 @@ class MCTSAgent(BaseAgent):
         if self.show_pbar:
             pbar = tqdm()
         while time.time() < timeout_start + self.simulation_time:
+        # for i in range(5):
             self.tree.do_rollout(board)
             if self.show_pbar:
                 pbar.update()
