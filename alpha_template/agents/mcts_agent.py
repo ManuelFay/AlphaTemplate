@@ -35,8 +35,8 @@ class MCTSAgent(BaseAgent):
         # Flip board so that agent always has pieces #1
         # TODO: Potentially adapt to your game
         if board.turn == 1:
-            board_[board.board == 1] = 2
-            board_[board.board == 2] = 1
+            board_[board.board == 3] = 4
+            board_[board.board == 4] = 3
 
         self.policies.append(policy)
         self.boards.append(board_)

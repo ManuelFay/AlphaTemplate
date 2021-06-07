@@ -4,6 +4,7 @@ import torch
 import torch.nn.functional as F
 import torch.nn as nn
 
+
 # TODO: Adapt input and architecture to your board adapt policy output size to match the size of the action set
 class NaiveNet(torch.nn.Module):
     def __init__(self, num_rows: int, num_cols: int):
@@ -15,7 +16,7 @@ class NaiveNet(torch.nn.Module):
 
         self.flat_size = (num_rows - 4) * (num_cols - 4) * 100
         self.linear_p1 = torch.nn.Linear(in_features=self.flat_size, out_features=100)
-        self.linear_p2 = torch.nn.Linear(in_features=100, out_features=num_cols)
+        self.linear_p2 = torch.nn.Linear(in_features=100, out_features=(num_cols + 1)*num_rows + (num_rows + 1)*num_cols)
 
         self.linear_s1 = torch.nn.Linear(in_features=self.flat_size, out_features=100)
         self.linear_s2 = torch.nn.Linear(in_features=100, out_features=2)
