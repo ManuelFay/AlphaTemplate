@@ -14,6 +14,7 @@ class Board:
         self.kernel = np.array([[0, 1, 0],
                                 [1, 0, 1],
                                 [0, 1, 0]])
+        self.action_indices = list(zip(*np.where(self.init_array() == 1)))
         assert isinstance(self.board, np.ndarray)
 
     @staticmethod
