@@ -62,8 +62,8 @@ class MCTSAgent(BaseAgent):
             self.save_state(board)
 
         # TODO: Potentially adapt to your game and your board state representation
-        # If less than 10 moves have been played and it's in training mode, play non optimal moves
-        if (board.board != 0).sum() < 10 and self.is_training:
+        # If less than 3 moves have been played and it's in training mode, play non optimal moves
+        if (board.board == 2).sum() < 3 and self.is_training:
             optimal_board = self.tree.choose_stochastic(board, temperature=0.5)
         else:
             optimal_board = self.tree.choose(board)

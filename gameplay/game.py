@@ -33,19 +33,12 @@ class Game:
         if self.board.is_valid_location(x, y):
             self.board.play_action(x, y)
 
-            if self.board.winning_move((1-self.board.turn)):
-                self.board.update_turn()
+            if self.board.winning_move() or self.board.tie():  # Switch because replay upon win
                 if self.visual_engine:
                     self.visual_engine.draw_scores(self.board.score_p1, self.board.score_p2, self.board.turn, game_over=True)
 
                 self.game_over = True
-                self.result = self.board.turn
-
-            elif self.board.tie():
-                if self.visual_engine:
-                    self.visual_engine.draw_scores(self.board.score_p1, self.board.score_p2, self.board.turn, game_over=True)
-                self.game_over = True
-                self.result = 0.5
+                self.result = 0.5 if self.board.tie() else self.board.turn
 
     def play(self):
         """ Game routine - call the visual engine, the UI, the AI and the board state."""
@@ -73,7 +66,6 @@ class Game:
                     if event.type == pygame.QUIT:
                         sys.exit()
                     if event.type == pygame.MOUSEBUTTONDOWN:
-                        print('current player : ', self.board.turn)
                         coord = self.visual_engine.detect_collision(event, self.board)
                         if coord:
                             self.make_move(*coord)
