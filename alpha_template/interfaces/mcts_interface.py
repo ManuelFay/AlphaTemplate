@@ -1,6 +1,5 @@
 import random
 from alpha_template.engines.mcts import Node
-from alpha_template.constants.constants import PLAYER_1, PLAYER_2
 
 from alpha_template.interfaces.board import Board
 

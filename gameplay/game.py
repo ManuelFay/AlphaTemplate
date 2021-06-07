@@ -51,7 +51,8 @@ class Game:
                 if self.visual_engine:
                     print(f"Agent 0 Confidence: {self.agent0.ai_confidence}")
                     self.visual_engine.draw_board(self.board.board, self.agent1.ai_confidence if self.agent1 else 0)
-                continue
+                    self.visual_engine.draw_scores(self.board.score_p1, self.board.score_p2, self.board.turn)
+                # continue
 
             if self.board.turn == PLAYER_2 and self.agent1 is not None:  # If it is the AI turn
                 x, y = self.agent1.move(board=self.board.board, turn=self.board.turn, score_p1=self.board.score_p1, score_p2=self.board.score_p2)
@@ -59,7 +60,8 @@ class Game:
                 if self.visual_engine:
                     print(f"Agent 1 Confidence: {self.agent1.ai_confidence}")
                     self.visual_engine.draw_board(self.board.board, self.agent1.ai_confidence if self.agent1 else 0)
-                continue
+                    self.visual_engine.draw_scores(self.board.score_p1, self.board.score_p2, self.board.turn)
+                # continue
 
             if self.visual_engine:
                 for event in pygame.event.get():

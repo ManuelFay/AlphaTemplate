@@ -30,7 +30,6 @@ class Board:
                     game_array[i, j] = 1
         return game_array
 
-
     def check_new_cells(self):
         output  = np.nonzero(convolve2d(self.board >= 2, self.kernel, mode="same") == 4)
         coords = [(x,y) for x,y in zip(*output) if self.board[x, y] == 0]
