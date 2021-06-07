@@ -29,11 +29,12 @@ class MCTSAgent(BaseAgent):
             self.policies = []
 
     def save_state(self, board):
-        policy = self.tree.get_policy(board)
+        tmp_policy = self.tree.get_policy(board, return_dict=True)
+        policy = [tmp_policy.get(action, 0) for action in board.action_indices]
+
         board_ = board.board.copy()
 
         # Flip board so that agent always has pieces #1
-        # TODO: Potentially adapt to your game
         if board.turn == 1:
             board_[board.board == 3] = 4
             board_[board.board == 4] = 3

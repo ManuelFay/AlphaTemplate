@@ -21,11 +21,11 @@ class NeuralInterface:
         tmp_boards = torch.tensor(board)
         input_ = torch.zeros(3, *tmp_boards.shape, dtype=torch.float32)
 
-        # TODO: Adapt to your game
         input_[0, tmp_boards == 2] = 1
         input_[1, tmp_boards == 3] = 1
         input_[2, tmp_boards == 4] = 1
 
+        # Always rotate board to act like player 0
         if node.turn == 1:
             input_ = input_[[0, 2, 1], :]
 

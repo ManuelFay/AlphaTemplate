@@ -14,6 +14,7 @@ class Board:
         self.kernel = np.array([[0, 1, 0],
                                 [1, 0, 1],
                                 [0, 1, 0]])
+        self.action_indices = list(zip(*np.where(self.init_array() == 1)))
         assert isinstance(self.board, np.ndarray)
 
     @staticmethod
@@ -29,7 +30,6 @@ class Board:
                 else:
                     game_array[i, j] = 1
         return game_array
-
 
     def check_new_cells(self):
         output  = np.nonzero(convolve2d(self.board >= 2, self.kernel, mode="same") == 4)
