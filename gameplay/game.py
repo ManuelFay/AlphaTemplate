@@ -32,8 +32,8 @@ class Game:
     def make_move(self, x, y):
         if self.board.is_valid_location(x, y):
             self.board.play_action(x, y)
-
             if self.board.winning_move() or self.board.tie():  # Switch because replay upon win
+                self.board.update_turn()
                 if self.visual_engine:
                     self.visual_engine.draw_scores(self.board.score_p1, self.board.score_p2, self.board.turn, game_over=True)
 
