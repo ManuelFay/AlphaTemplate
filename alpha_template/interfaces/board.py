@@ -78,6 +78,7 @@ class Board:
         Here it means that the player that just played has won more than half of the squares"""
         return max(self.score_p2, self.score_p1) > rows*cols/2
 
+
     def tie(self):
         """Detect if the game is a tie
         Here it checks if board is full and score indeterminate, different games may have different tie condictions"""

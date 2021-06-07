@@ -35,8 +35,8 @@ class MCTSAgent(BaseAgent):
         # Flip board so that agent always has pieces #1
         # TODO: Potentially adapt to your game
         if board.turn == 1:
-            board_[board.board == 1] = 2
-            board_[board.board == 2] = 1
+            board_[board.board == 3] = 4
+            board_[board.board == 4] = 3
 
         self.policies.append(policy)
         self.boards.append(board_)
@@ -63,7 +63,7 @@ class MCTSAgent(BaseAgent):
             self.save_state(board)
 
         # TODO: Potentially adapt to your game and your board state representation
-        # If less than 4 moves have been played and it's in training mode, play non optimal moves
+        # If less than 3 moves have been played and it's in training mode, play non optimal moves
         if (board.board == 2).sum() < 3 and self.is_training:
             optimal_board = self.tree.choose_stochastic(board, temperature=0.5)
         else:
