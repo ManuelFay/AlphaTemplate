@@ -8,6 +8,7 @@ from alpha_template.constants.constants import rows, cols
 
 class NeuralInterface:
     def __init__(self, model_path=None):
+        # TODO: Put good num row
         self.model = NaiveNet(num_rows=rows, num_cols=cols)
         if model_path:
             # print(f"Loading weights from {model_path}")
