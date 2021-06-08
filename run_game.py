@@ -12,7 +12,7 @@ agent0 = None
 # agent0 = NeuralMCTSAgent(simulation_time=3, model_path="/home/manu/perso/RL_Connect4/model_0.pth")
 
 agent1 = None # NeuralMCTSAgent(simulation_time=2, show_pbar=True, model_path="./models/model_1.pth")
-agent1 = MCTSAgent(simulation_time=3, show_pbar=True)
+agent1 = MCTSAgent(simulation_time=3, show_pbar=False)
 
 game = Game(agent0=agent0, agent1=agent1, enable_ui=True)
 result = game.play()
