@@ -11,7 +11,6 @@ class TemplateDataset(torch.utils.data.Dataset):
         self.training = training
         self.n_samples = len(self.success)
 
-    # TODO: Adapt to your board shape
     def __getitem__(self, idx):
         # Add transforms for data augmentation
         idx = idx % self.n_samples
@@ -19,6 +18,8 @@ class TemplateDataset(torch.utils.data.Dataset):
 
         if self.training and random.random() < 0.5:
             tmp_boards = torch.flip(tmp_boards, [1])
+        if self.training and random.random() < 0.5:
+            tmp_boards = torch.flip(tmp_boards, [0])
 
         boards = torch.zeros(3, *tmp_boards.shape, dtype=torch.float32)
         boards[0, tmp_boards == 2] = 1

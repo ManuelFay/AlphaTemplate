@@ -28,7 +28,6 @@ class Game:
             self.visual_engine.draw_board(self.board.board)
             self.visual_engine.draw_scores(self.board.score_p1, self.board.score_p2, self.board.turn)
 
-    # TODO: Adapt to your game
     def make_move(self, x, y):
         if self.board.is_valid_location(x, y):
             self.board.play_action(x, y)

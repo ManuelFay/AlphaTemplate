@@ -71,7 +71,6 @@ class MCTSAgent(BaseAgent):
 
         self.ai_confidence = self.estimate_confidence(board)
 
-        # TODO: Last move is the last action played (can be int, tuple, etc)
         return optimal_board.last_move
 
     def kill_agent(self, result: float):

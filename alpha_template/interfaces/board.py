@@ -43,7 +43,6 @@ class Board:
     def update_turn(self):
         self.turn = 1 - self.turn
 
-    # TODO: adapt to your game
     def play_action(self, x, y):
         """Update board after move"""
         # Can be removed for speed
@@ -62,7 +61,6 @@ class Board:
         self.last_move = (x, y)
         self.update_turn()
 
-    # TODO: adapt to your game. Actions may be encoded with a (x, y) tuple instead of just col
     def is_valid_location(self, x, y) -> bool:
         """Check if the action is possible: (ie. No one played there before)
         Return boolean value"""

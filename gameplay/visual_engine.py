@@ -21,9 +21,6 @@ class segment:
         self.y = y
 
 
-
-
-# TODO: Substitute your visual engine
 class VisualEngine:
     def __init__(self):
         pygame.init()   # pylint: disable=no-member
