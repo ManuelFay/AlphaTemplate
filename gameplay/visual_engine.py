@@ -5,13 +5,8 @@ import numpy as np
 
 from alpha_template.constants.constants import *
 
-class coords:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
 
-
-class segment:
+class Segment:
     def __init__(self, type_, rect, clicked, color, x, y):
         self.type_ = type_
         self.rect = rect
@@ -21,20 +16,18 @@ class segment:
         self.y = y
 
 
-
-
 # TODO: Substitute your visual engine
 class VisualEngine:
     def __init__(self):
-        pygame.init()   # pylint: disable=no-member
-        size = (rows * height + 5, cols * width + 5 + 30) # 5 epaisseur du trait  #30 zone de texte
+        pygame.init()  # pylint: disable=no-member
+        size = (rows * height + 5, cols * width + 5 + 30)  # 5 epaisseur du trait  #30 zone de texte
         self.screen = pygame.display.set_mode(size)
         self.font = pygame.font.Font('freesansbold.ttf', 32)
         self.font2 = pygame.font.Font('freesansbold.ttf', 20)
 
         self.grid = self.init_grid()
         # Check if useful
-        a = segment('h', pygame.Rect((30, 30), (30, 30)), False, red, None, None)
+        a = Segment('h', pygame.Rect((30, 30), (30, 30)), False, red, None, None)
 
         self.surf_grid = pygame.surfarray.make_surface(self.grid)
         self.surf_score = pygame.Surface([rows * height + 5, 30])
@@ -51,10 +44,11 @@ class VisualEngine:
             for j in range(0, cols + 1):
                 # 3 extra segments in h and v that could be removed
                 pygame.draw.circle(self.dots, grey0, (i * height + 3, j * width + 3), 5)
-                self.h_segments.append(segment('h', pygame.Rect((i * height, j * width), (width, 5)), False, grey3, x=i*2+1, y=j*2))
-                self.v_segments.append(segment('v', pygame.Rect((i * height, j * width), (5, height)), False, grey3, x=i*2, y=j*2+1))
+                self.h_segments.append(
+                    Segment('h', pygame.Rect((i * height, j * width), (width, 5)), False, grey3, x=i * 2 + 1, y=j * 2))
+                self.v_segments.append(
+                    Segment('v', pygame.Rect((i * height, j * width), (5, height)), False, grey3, x=i * 2, y=j * 2 + 1))
         self.surf_winner.fill(grey4)
-
 
     def init_grid(self):
         grid = np.full((rows * height, cols * width, 3), grey2)
@@ -89,13 +83,12 @@ class VisualEngine:
 
         for x, y in list(zip(*np.nonzero(board > 2))):
             self.grid = self.fill_big(self.grid, (x // 2) * width,
-                                                                  (y // 2) * height,
-                                                                  blue2 if (board[x, y] == 3) else green2)
+                                      (y // 2) * height,
+                                      blue2 if (board[x, y] == 3) else green2)
 
             self.surf_grid = pygame.surfarray.make_surface(self.grid)
 
         pygame.display.update()
-
 
     def draw_scores(self, score_p1, score_p2, turn, game_over=False):
         score1 = self.font.render(str(score_p1), True, blue)
@@ -116,9 +109,8 @@ class VisualEngine:
                 winner_font = self.font2.render(f"P{turn} Won", True, (0, 0, 0))
 
             self.screen.blit(self.surf_winner, (0, 0))
-            self.screen.blit(winner_font, (cols * width / 2, rows * height / 2))  ###centrer
+            self.screen.blit(winner_font, (cols * width / 2, rows * height / 2))  # TODO: center
         pygame.display.update()
-
 
     @staticmethod
     def fill_big(grid, i, j, color):
