@@ -14,7 +14,7 @@ class NaiveNet(torch.nn.Module):
         self.dropout_1 = nn.Dropout(p=0.3, inplace=False)
         self.dropout_2 = nn.Dropout(p=0.3, inplace=False)
 
-        self.flat_size = (num_rows - 4) * (num_cols - 4) * 100
+        self.flat_size = ((num_rows * 2 + 1) - 4) * ((num_cols * 2 + 1) - 4) * 100
         self.linear_p1 = torch.nn.Linear(in_features=self.flat_size, out_features=100)
         self.linear_p2 = torch.nn.Linear(in_features=100, out_features=(num_cols + 1)*num_rows + (num_rows + 1)*num_cols)
 
