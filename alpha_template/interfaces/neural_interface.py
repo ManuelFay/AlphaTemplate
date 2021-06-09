@@ -32,4 +32,7 @@ class NeuralInterface:
         col_evaluation, score_evaluation = self.model(input_.unsqueeze(0))
         score = score_evaluation.squeeze().item()
         policy = col_evaluation.squeeze().detach().cpu().numpy()
+
+        assert len(policy) == len(node.action_indices)
+        policy = {action: pol for action, pol in zip(node.action_indices, policy)}
         return score, policy

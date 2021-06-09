@@ -2,7 +2,7 @@ import sys
 from gameplay.game import Game
 
 from alpha_template.agents.mcts_agent import MCTSAgent
-# from alpha_template.agents.neural_mcts_agent import NeuralMCTSAgent
+from alpha_template.agents.neural_mcts_agent import NeuralMCTSAgent
 
 # Setup players (None is a human player, MCTSAgent, MinimaxAgent)
 
