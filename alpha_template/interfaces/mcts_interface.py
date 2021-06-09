@@ -28,7 +28,6 @@ class BoardTree(Board, Node):
         # Otherwise, you can make a move in each of the empty spots
         childs = set()
 
-        # TODO: Adapt to your game if needed
         for x, y in self.get_valid_locations():
             childs.add(self.create_child(x, y))
 
@@ -38,7 +37,6 @@ class BoardTree(Board, Node):
         if self.is_terminal():
             return None  # If the game is finished then no moves can be made
 
-        # TODO: Adapt to your game if needed
         x, y = random.choice(self.get_valid_locations())
         return self.create_child(x, y)
 

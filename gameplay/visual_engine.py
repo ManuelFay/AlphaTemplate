@@ -92,11 +92,13 @@ class VisualEngine:
 
     def draw_scores(self, score_p1, score_p2, turn, game_over=False):
         score1 = self.font.render(str(score_p1), True, blue)
+        turn_ = self.font2.render(f"(P{turn})", True, green if turn else blue)
         score2 = self.font.render(str(score_p2), True, green)
 
         self.screen.blit(self.surf_score, (0, cols * width + 5))
         # surf_score.blit(score, (3, 3))
         self.screen.blit(score1, (3, cols * width + 5 + 3))
+        self.screen.blit(turn_, ((rows * height + 5 - 35)//2, cols * width + 5 + 4))
         if score_p2 < 10:
             self.screen.blit(score2, (rows * height + 5 - 20, cols * width + 5 + 3))
         if score_p2 > 9:

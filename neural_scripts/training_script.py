@@ -21,6 +21,7 @@ args = TrainingArgs(
     # from_pretrained="../models/model_0.pth",
     model_output_path="../models/model_2.pth"
 )
+
 trainer = Trainer(model=NaiveNet(rows, cols),
                   train_dataset=train_set,
                   test_dataset=test_set,
