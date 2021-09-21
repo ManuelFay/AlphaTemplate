@@ -45,7 +45,7 @@ class MCTSAgent(BaseAgent):
     def estimate_confidence(self, board):
         """Confidence estimation assuming optimal adversary"""
         optimal_board = self.tree.choose(board)
-        return self.tree.score(optimal_board)
+        return self.tree.score(optimal_board) if optimal_board.turn != board.turn else 1 - self.tree.score(optimal_board)
 
     def move(self, board, turn, **args):
         board = BoardTree(board, turn=turn, **args)
@@ -54,6 +54,7 @@ class MCTSAgent(BaseAgent):
         if self.show_pbar:
             pbar = tqdm()
         while time.time() < timeout_start + self.simulation_time:
+        # for i in range(5):
             self.tree.do_rollout(board)
             if self.show_pbar:
                 pbar.update()

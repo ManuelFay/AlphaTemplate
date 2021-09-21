@@ -59,7 +59,9 @@ class Board:
             self.score_p2 += len(coords)
 
         self.last_move = (x, y)
-        self.update_turn()
+
+        if len(coords) == 0:
+            self.update_turn()
 
     def is_valid_location(self, x, y) -> bool:
         """Check if the action is possible: (ie. No one played there before)
@@ -72,7 +74,8 @@ class Board:
     def winning_move(self):
         """Detect if game is won
         Here it means that the player that just played has won more than half of the squares"""
-        return max(self.score_p2, self.score_p1) > rows * cols / 2
+        return max(self.score_p2, self.score_p1) > rows*cols/2
+
 
     def tie(self):
         """Detect if the game is a tie

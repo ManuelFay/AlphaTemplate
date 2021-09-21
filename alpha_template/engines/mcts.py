@@ -112,20 +112,33 @@ class MCTS:
     @staticmethod
     def _simulate(node):
         "Returns the reward for a random simulation (to completion) of `node`"
-        invert_reward = True
+        # If A is on a path to victory: False False False -> return 1
+        # If B has to play and let's a sure victory to A: False True True -> return 0
+        invert_reward = False
         while True:
             if node.is_terminal():
                 reward = node.reward()
                 return 1 - reward if invert_reward else reward
+
+            old_turn = node.turn
             node = node.find_random_child()
-            invert_reward = not invert_reward
+            if old_turn != node.turn:
+                invert_reward = not invert_reward
 
     def _backpropagate(self, path, reward):
         "Send the reward back up to the ancestors of the leaf"
+        # old_turn is a temporary fix for the non-strictly alternating gameplay
+        old_turn = None
+
+        # reward = 1 - reward
         for node in reversed(path):
             self.visit_count[node] += 1
-            self.q_value[node] += reward
-            reward = 1 - reward  # 1 for me is 0 for my enemy, and vice versa
+
+            if (old_turn is not None) and old_turn != node.turn:
+                reward = 1 - reward  # 1 for me is 0 for my enemy, and vice versa
+            old_turn = node.turn
+
+            self.q_value[node] = reward
 
     def _uct_select(self, node):
         "Select a child of node, balancing exploration & exploitation"

@@ -41,7 +41,8 @@ class BoardTree(Board, Node):
         return self.create_child(x, y)
 
     def reward(self):
-        return 0.5 if self.tie() else 0
+        return 0.5 if self.tie() else 1
+
 
     def __hash__(self):
         return self.id_
